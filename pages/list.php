@@ -13,6 +13,39 @@ if(! $conn )
 // 设置编码，防止中文乱码
 mysqli_query($conn , "set names utf8");
 
+
+function print_selected($selected_area) {
+  global $conn;
+    
+  $select_restaurants_sql = 'SELECT name, detail FROM restaurants WHERE area='.$selected_area;
+  
+  mysqli_select_db( $conn, 'reviewdb' );
+  $retval = mysqli_query( $conn, $select_restaurants_sql );
+  if(! $retval )
+  {
+    die('无法读取数据: ' . mysqli_error($conn));
+  }
+  
+  print '<table class="list">';
+  
+  while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC)) 
+  {
+    echo '<tr>';
+	echo '<td>'.$row['name'].'</td>';
+	echo '<td>'.$row['detail'].'</td>';
+	echo '</tr>';
+  }				
+
+  print '</table>';
+
+}
+
+
+
+
+
+
+
 ?>
 
 <head>
@@ -58,7 +91,7 @@ while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
 		    <?php 
 			echo "<div>HELLO</div>";
 			if (isset($_GET['area'])) {
-			   echo "User selected!!!!".$_GET['area'];
+			   print_selected($_GET['area']);
 			} else {
 			   echo "Please select";
 			}
@@ -66,8 +99,6 @@ while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
 			
 			
 			?>
-		<table class="list">
-		</table>
 	</main>
 	<footer>
 		<div id="copyright">(C) 2019 The Web System Development Course</div>
