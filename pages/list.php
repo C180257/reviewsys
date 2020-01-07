@@ -17,7 +17,7 @@ mysqli_query($conn , "set names utf8");
 function print_selected($selected_area) {
   global $conn;
     
-  $select_restaurants_sql = 'SELECT name, detail FROM restaurants WHERE area='.$selected_area;
+  $select_restaurants_sql = 'SELECT name, detail,id FROM restaurants WHERE area='.$selected_area;
   
   mysqli_select_db( $conn, 'reviewdb' );
   $retval = mysqli_query( $conn, $select_restaurants_sql );
@@ -33,6 +33,7 @@ function print_selected($selected_area) {
     echo '<tr>';
 	echo '<td>'.$row['name'].'</td>';
 	echo '<td>'.$row['detail'].'</td>';
+	echo '<td><a href="detail.php?id='.$row['id'].'">詳細</a></td>';
 	echo '</tr>';
   }				
 
@@ -95,8 +96,6 @@ while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
 			} else {
 			   echo "Please select";
 			}
-			
-			
 			
 			?>
 	</main>
