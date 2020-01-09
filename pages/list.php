@@ -72,6 +72,7 @@ function print_selected($selected_area) {
 
 <?php					
 
+// DB拿出所有地点的ID和name
 $sql = 'SELECT id, name FROM areas;';
  
 mysqli_select_db( $conn, 'reviewdb' );
@@ -92,6 +93,7 @@ while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
 		    <?php 
 			echo "<div>HELLO</div>";
 			if (isset($_GET['area'])) {
+			    // 
 			   print_selected($_GET['area']);
 			} else {
 			   echo "Please select";

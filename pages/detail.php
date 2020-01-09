@@ -13,34 +13,23 @@ if(! $conn )
 mysqli_query($conn , "set names utf8");
 
 
-function print_selected($selected_area) {
-  global $conn;
-    
-  $select_restaurants_sql = 'SELECT name, detail FROM restaurants WHERE area='.$selected_area;
-  
-  mysqli_select_db( $conn, 'reviewdb' );
-  $retval = mysqli_query( $conn, $select_restaurants_sql );
-  if(! $retval )
-  {
-    die('无法读取数据: ' . mysqli_error($conn));
-  }
-  
-  print '<table class="list">';
-  
-  while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC)) 
-  {
-    echo '<tr>';
-	echo '<td>'.$row['name'].'</td>';
-	echo '<td>'.$row['detail'].'</td>';
-	echo '<td><a href="detail.php?id='.$row['id'].'">詳細</a></td>';
-	echo '</tr>';
-  }				
+$selected_fandian = $_GET['id'];
 
-  print '</table>';
-
+$select_restaurants_sql = 'SELECT name, detail,image FROM restaurants WHERE id='.$selected_fandian;
+  
+mysqli_select_db( $conn, 'reviewdb' );
+$retval = mysqli_query( $conn, $select_restaurants_sql );
+if(! $retval )
+{
+  die('无法读取数据: ' . mysqli_error($conn));
 }
+  
+  
+$row = mysqli_fetch_array($retval, MYSQLI_ASSOC); 
 
-
+$name = $row['name'];
+$detail = $row['detail'];
+$image= $row['image'];
 
 
 ?>
@@ -60,12 +49,11 @@ function print_selected($selected_area) {
 			<h2>レストラン詳細</h2>
 			<table class="list">
 				<tr>
-					<td class="photo"><img width="110" alt="「レストラン さくら」の写真" src="../pages/img/restaurant_7.jpg" /></td>
+					<td class="photo"><img width="110" alt="「レストラン さくら」の写真" src="../pages/img/<?php echo $image; ?>" /></td>
 					<td class="info">
 						<dl>
-						    <?php
-							 mingzi($_GET['id']);
-							 ?>
+						    <dt><?php echo $name; ?></dt>
+							<dd><?php echo $detail; ?></dd>
 						</dl>
 					</td>
 				</tr>
@@ -73,14 +61,42 @@ function print_selected($selected_area) {
 		</article>
 		<article id="reviews">
 			<h2>レビュ一覧</h2>
-			<dl>
-				<dt>★★★★☆</dt>
-				<dd>常連の者で、いつも夫婦で伺っています。席数が少ないので予約した方が安心ですが、その分落ち着いて食事できますよ。コースのメインは基本的にシェフにお任せ。来るたびに、新しい味との出会いを楽しめるお店です。（totsuka）</dd>
-			</dl>
-			<dl>
-				<dt>★★★★★</dt>
-				<dd>説明の通り、喧騒を外れた場所にひっそりとあるレストランでした。伊豆市には初めて来ましたが、本当に桜がきれいですね。何よりも空気がきれいで、いいリフレッシュになりました。（oie）</dd>
-			</dl>
+
+<?php 
+
+  $select_pingjia_sql = 'SELECT comment, rating FROM reviews WHERE restaurant='.$selected_fandian;
+  
+  mysqli_select_db( $conn, 'reviewdb' );
+  $retval = mysqli_query( $conn, $select_pingjia_sql );
+  if(! $retval )
+  {
+    die('无法读取数据: ' . mysqli_error($conn));
+  }
+  
+  while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC)) 
+  {
+    echo '<dl>';
+    
+$white = 0;
+$black = $;
+
+	echo '<dt>';
+
+for ($i=0; i< $black; $i++) {
+	echo '★';
+}
+for ($i=0; i< $white; $i++) {
+	echo '☆';
+}
+	echo '</dt>';
+
+	echo '<dd>'.$row['comment'].'</dd>';
+	echo '</dl>';
+  }				
+
+?>
+
+
 		</article>
 		<article id="review">
 			<h2>レビュを書き込む</h2>
