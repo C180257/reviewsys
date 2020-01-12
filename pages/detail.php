@@ -49,7 +49,7 @@ $image= $row['image'];
 			<h2>レストラン詳細</h2>
 			<table class="list">
 				<tr>
-					<td class="photo"><img width="110" alt="「レストラン さくら」の写真" src="../pages/img/<?php echo $image; ?>" /></td>
+					<td class="photo"><img width="110" alt="写真" src="../pages/img/<?php echo $image; ?>" /></td>
 					<td class="info">
 						<dl>
 						    <dt><?php echo $name; ?></dt>
@@ -62,7 +62,7 @@ $image= $row['image'];
 		<article id="reviews">
 			<h2>レビュ一覧</h2>
 
-<?php 
+<?php
 
   $select_pingjia_sql = 'SELECT comment, rating FROM reviews WHERE restaurant='.$selected_fandian;
   
@@ -77,25 +77,24 @@ $image= $row['image'];
   {
     echo '<dl>';
     
-$white = 0;
-$black = $;
+    $black = $row['rating'];
+    $white = 5-$black;
 
 	echo '<dt>';
 
-for ($i=0; i< $black; $i++) {
-	echo '★';
-}
-for ($i=0; i< $white; $i++) {
-	echo '☆';
-}
+    for ($i=0; i< $black; $i++) {
+	    echo '★';
+    }
+    for ($i=0; i< $white; $i++) {
+	    echo '☆';
+    }
 	echo '</dt>';
 
 	echo '<dd>'.$row['comment'].'</dd>';
 	echo '</dl>';
-  }				
+  }		
 
 ?>
-
 
 		</article>
 		<article id="review">
