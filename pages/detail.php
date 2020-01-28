@@ -82,10 +82,10 @@ $image= $row['image'];
 
 	echo '<dt>';
 
-    for ($i=0; i< $black; $i++) {
+    for ($i=0; $i< $black; $i++) {
 	    echo '★';
     }
-    for ($i=0; i< $white; $i++) {
+    for ($i=0; $i< $white; $i++) {
 	    echo '☆';
     }
 	echo '</dt>';
