@@ -88,7 +88,7 @@ $image= $row['image'];
 
 <?php
 
-  $select_pingjia_sql = 'SELECT comment, rating, reviewer FROM reviews WHERE restaurant='.$selected_fandian;
+  $select_pingjia_sql = 'SELECT comment, rating, reviewer FROM reviews WHERE restaurant='.$selected_fandian.' ORDER BY created DESC';
   
   mysqli_select_db( $conn, 'reviewdb' );
   $retval = mysqli_query( $conn, $select_pingjia_sql );
