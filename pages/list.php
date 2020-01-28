@@ -91,18 +91,17 @@ while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
 			</form>
 		</div><!-- /.clearfix -->
 		    <?php 
-			echo "<div>HELLO</div>";
 			if (isset($_GET['area'])) {
-			    // 
+			   // 地域リストを関数で表示させます。
 			   print_selected($_GET['area']);
 			} else {
-			   echo "Please select";
+			   echo "リストから地域を選択してください。";
 			}
 			
 			?>
 	</main>
 	<footer>
-		<div id="copyright">(C) 2019 The Web System Development Course</div>
+		<div id="copyright">(C) 2019 The Web System Development Course　C180257張文佳</div>
 	</footer>
 </body>
 

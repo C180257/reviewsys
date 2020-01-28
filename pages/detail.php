@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <?php
+
 $dbhost = 'localhost:3306';  // mysql服务器主机地址
 $dbuser = 'root';            // mysql用户名
 $dbpass = '';                // mysql用户名密码
@@ -9,15 +10,37 @@ if(! $conn )
 {
     die('连接失败: ' . mysqli_error($conn));
 }
+
 // 设置编码，防止中文乱码
 mysqli_query($conn , "set names utf8");
+mysqli_select_db( $conn, 'reviewdb' );
 
 
-$selected_fandian = $_GET['id'];
+if (isset($_POST['id'])) { // 投稿ボタンから
+  $selected_fandian = $_POST['id'];
+  $name = $_POST['reviewer'];
+  $comment = $_POST['comment'];
+  $rating = $_POST['point'];
+  
+  if (strlen($comment)==0) die('コメントは空にできません。');
+  
+  $sql_save_comment = "INSERT INTO reviews (restaurant, reviewer, comment, rating) 
+  VALUES ( '$selected_fandian', '$name', '$comment', '$rating' )";
+  
+  if(mysqli_query($conn, $sql_save_comment)) {
+      echo 'コメントを保存しました。';
+  } else {
+      echo "Error: " . mysqli_error($conn);
+  }
+  
+} else if (isset($_GET['id'])) { // list から
+  $selected_fandian = $_GET['id'];
+} else {
+  die('list.php からアクセスしてください。 C180257張文佳・2020');
+}
 
 $select_restaurants_sql = 'SELECT name, detail,image FROM restaurants WHERE id='.$selected_fandian;
   
-mysqli_select_db( $conn, 'reviewdb' );
 $retval = mysqli_query( $conn, $select_restaurants_sql );
 if(! $retval )
 {
@@ -30,6 +53,7 @@ $row = mysqli_fetch_array($retval, MYSQLI_ASSOC);
 $name = $row['name'];
 $detail = $row['detail'];
 $image= $row['image'];
+
 
 
 ?>
@@ -64,7 +88,7 @@ $image= $row['image'];
 
 <?php
 
-  $select_pingjia_sql = 'SELECT comment, rating FROM reviews WHERE restaurant='.$selected_fandian;
+  $select_pingjia_sql = 'SELECT comment, rating, reviewer FROM reviews WHERE restaurant='.$selected_fandian;
   
   mysqli_select_db( $conn, 'reviewdb' );
   $retval = mysqli_query( $conn, $select_pingjia_sql );
@@ -90,6 +114,7 @@ $image= $row['image'];
     }
 	echo '</dt>';
 
+	echo '<dt>'.$row['reviewer'].'</dt>';
 	echo '<dd>'.$row['comment'].'</dd>';
 	echo '</dl>';
   }		
@@ -99,7 +124,7 @@ $image= $row['image'];
 		</article>
 		<article id="review">
 			<h2>レビュを書き込む</h2>
-			<form name="review_form" action="detail.html" method="post">
+			<form name="review_form" action="detail.php" method="post">
 				<table class="review">
 					<tr>
 						<th>お名前</th>
@@ -125,6 +150,7 @@ $image= $row['image'];
 						<td><textarea name="comment"></textarea></td>
 					</tr>
 				</table>
+				<input type="hidden" name="id" value="<?php echo $selected_fandian; ?>" />
 				<input type="submit" value="投稿" />
 				<input type="reset" value="クリア" />
 			</form>
@@ -132,7 +158,7 @@ $image= $row['image'];
 		
 	</main>
 	<footer>
-		<div id="copyright">(C) 2019 The Web System Development Course</div>
+		<div id="copyright">(C) 2019 The Web System Development Course　C180257張文佳</div>
 	</footer>
 </body>
 
